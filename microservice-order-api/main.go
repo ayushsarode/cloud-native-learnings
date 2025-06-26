@@ -1,37 +1,30 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"net/http"
+	"microservice-order-api/application"
+	"os"
+	"os/signal"
 )
 
 
 
 func main() {
-	server := &http.Server{
-		Addr: ":8080",
-		Handler: http.HandlerFunc(basicHandler),
-	}
+	app := application.New()
 
-	err := server.ListenAndServe()
-	fmt.Println("Server is running at 8080")
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+
+	defer cancel() 
+
+	err := app.Start(ctx)
+
 
 	if err != nil {
-		fmt.Println("failed to listen to server", err)
+		fmt.Println("failed to start app:", err)
 	}
-
-
-	
 }
-	func basicHandler(w http.ResponseWriter, r *http.Request) {
-		r.Method == http.MethodGet {
-			if r.URL.Path == "/foo" {
 
-			}
-		}
-
-		
-	}
 
 
 
